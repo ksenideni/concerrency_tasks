@@ -1,8 +1,8 @@
-package org.example.factory;
+package org.example.factory.thread_pool;
 
 import java.util.concurrent.Callable;
 
-public class Worker implements Callable<Void> {
+public class Worker implements Callable<Worker> {
     private int id;
 
     public Worker(int id) {
@@ -10,10 +10,9 @@ public class Worker implements Callable<Void> {
     }
 
     @Override
-    public Void call() throws Exception {
+    public Worker call() throws Exception {
         workOnMachine(id);
-        Main.machines.submit(this);
-        return null;
+        return this;
     }
 
     private void workOnMachine(int workerId) {

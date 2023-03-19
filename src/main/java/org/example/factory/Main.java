@@ -10,15 +10,17 @@ public class Main {
     private static final int NUMBER_OF_WORKER = 8;
     private static final int NUMBER_OF_MACHINES = 5;
 
-    public static void main(String[] args) throws InterruptedException {
-
+    public static void main(String[] args) {
         ExecutorService machines = Executors.newFixedThreadPool(NUMBER_OF_MACHINES);//5 постоянно работающих станков
         List<Callable<Void>> workers = new ArrayList<>();
-        for (int i = 1; i <= NUMBER_OF_WORKER; i++) {
+        for (int i = 0; i < NUMBER_OF_WORKER; i++) {
             workers.add(createWorker(i));
         }
-        machines.invokeAll(workers);
-        machines.shutdown();
+        int j = 0;
+        while (true) {
+            machines.submit(workers.get(j));
+            j = j==NUMBER_OF_WORKER-1 ? 0 : j+1;
+        }
     }
 
     private static void workOnMachine(int workerId) {
